@@ -7,5 +7,5 @@ import (
 //Tag 标签模型
 type Tag struct {
 	gorm.Model
-	Name   string `gorm:"type:varchar(255);"`
+	Name   string `gorm:"unique;type:varchar(255);"`
 }

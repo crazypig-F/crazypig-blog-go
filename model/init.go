@@ -40,13 +40,30 @@ func InitMysqlDatabase(conn string) {
 	sqlDB.SetConnMaxLifetime(time.Second * 30)
 	DB = db
 	migration()
+	superAdmin := User{
+		UserName:      "crazypig",
+		NickName:      "crazypig",
+		Email:         "362370932@qq.com",
+		Avatar:        "http://cdn.crazypig.top/th.jpg",
+		Administrator: true,
+	}
+	if err := superAdmin.SetPassword("123456"); err != nil {
+		panic(err)
+	}
+	var count int64
+	DB.Find(&superAdmin).Count(&count)
+	if count != 1 {
+		if err := DB.Create(&superAdmin).Error; err != nil {
+			panic(err)
+		}
+	}
 }
 
 //执行数据迁移
 func migration() {
 	//自动迁移模式
 	err := DB.Set("gorm:table_options", "charset=utf8mb4").
-		AutoMigrate(&Blog{}, &Comment{}, &Essay{}, &Message{}, &Project{}, &Tag{}, &Tags{}, &Type{}, &User{})
+		AutoMigrate(&Blog{}, &Comment{}, &Tag{}, &Tags{}, &Type{}, &User{})
 	if err != nil {
 		return
 	}

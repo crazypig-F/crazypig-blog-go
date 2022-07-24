@@ -2,7 +2,7 @@ package serializer
 
 import "BlogProject/model"
 
-type User struct {
+type UserVO struct {
 	UserName      string `json:"useName" form:"useName"`
 	NickName      string `json:"nickName" form:"nickName"`
 	Avatar        string `json:"avatar" form:"avatar"` //头像
@@ -10,9 +10,9 @@ type User struct {
 	CreateAt      int64  `json:"create_at" form:"create_at"` // 创建
 }
 
-//BuildUser 序列化用户
-func BuildUser(user model.User) User {
-	return User{
+//BuildUserVO 序列化用户
+func BuildUserVO(user model.User) UserVO {
+	return UserVO{
 		UserName: user.UserName,
 		NickName: user.NickName,
 		Avatar:   user.Avatar,

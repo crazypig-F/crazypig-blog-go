@@ -13,8 +13,8 @@ type Blog struct {
 	Published      bool
 	Recommend      bool
 	ShareStatement bool
-	Title          string `gorm:"type:varchar(255);"`
-	Views          int
+	Title          string `gorm:"unique;type:varchar(255);"`
+	Stars          int
 	TypeId         int `gorm:"type:bigint;"`
 	UserId         int `gorm:"type:bigint;"`
 }

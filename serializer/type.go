@@ -6,4 +6,3 @@ type TypeVO struct {
 	PicUrl  string `json:"picUrl" form:"picUrl"`
 	BlogIds []int  `json:"blogIds" form:"blogIds"`
 }
-

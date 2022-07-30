@@ -3,7 +3,6 @@ package routes
 import (
 	"BlogProject/controller"
 	"BlogProject/controller/front"
-	"BlogProject/controller/qiniu"
 	"BlogProject/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -20,12 +19,11 @@ func NewRouter() *gin.Engine {
 			c.JSON(200, "success")
 		})
 		//上传操作
-		v1.POST("upload", qiniu.UpLoad)
+		v1.POST("upload", controller.UpLoad)
 		//前台用户
 		v1.GET("front/blogs", front.ListFrontBlogController)
 		v1.GET("front/tags", front.ListFrontTagController)
 		v1.GET("front/types", front.ListFrontTypeController)
-
 		v1.GET("front/blog/:id", front.ShowFrontBlogController)
 		// 登陆注册操作
 		v1.POST("user/register", controller.UserRegisterController)

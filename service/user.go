@@ -28,9 +28,9 @@ type UserService struct {
 }
 
 func (service *UserService) Login() *serializer.Response {
-	var user model.User
+	var userModel model.User
 	code := e.SUCCESS
-	if err := model.DB.Where("user_name=?", service.LoginForm.UserName).First(&user).Error; err != nil {
+	if err := model.DB.Where("user_name=?", service.LoginForm.UserName).First(&userModel).Error; err != nil {
 		//如果查询不到，返回相应的错误
 		if gorm.IsRecordNotFoundError(err) {
 			logger.Logger.Info(err)
@@ -48,14 +48,14 @@ func (service *UserService) Login() *serializer.Response {
 		}
 	}
 
-	if !user.CheckPassword(service.LoginForm.Password) {
+	if !userModel.CheckPassword(service.LoginForm.Password) {
 		code = e.ErrorNotCompare
 		return &serializer.Response{
 			Status: code,
 			Msg:    e.GetMsg(code),
 		}
 	}
-	token, err := util.GenerateToken(user.ID, service.LoginForm.UserName, 0)
+	token, err := util.GenerateToken(userModel.ID, service.LoginForm.UserName, 0)
 	if err != nil {
 		logger.Logger.Info(err)
 		code = e.ErrorAuthToken
@@ -66,16 +66,16 @@ func (service *UserService) Login() *serializer.Response {
 	}
 	return &serializer.Response{
 		Status: code,
-		Data:   serializer.TokenData{User: serializer.BuildUserVO(user), Token: token},
+		Data:   serializer.TokenData{User: serializer.BuildUserVO(userModel), Token: token},
 		Msg:    e.GetMsg(code),
 	}
 }
 
 func (service *UserService) Register() *serializer.Response {
 	code := e.SUCCESS
-	var user model.User
+	var userModel model.User
 	var count int64
-	model.DB.Model(&model.User{}).Where("user_name=?", service.RegisterForm.UserName).First(&user).Count(&count)
+	model.DB.Model(&model.User{}).Where("user_name=?", service.RegisterForm.UserName).First(&userModel).Count(&count)
 	//表单验证
 	if count == 1 {
 		code = e.ErrorExistUser
@@ -85,7 +85,7 @@ func (service *UserService) Register() *serializer.Response {
 		}
 	}
 	//加密密码
-	if err := user.SetPassword(service.RegisterForm.Password); err != nil {
+	if err := userModel.SetPassword(service.RegisterForm.Password); err != nil {
 		logger.Logger.Info(err)
 		code = e.ErrorFailEncryption
 		return &serializer.Response{
@@ -94,11 +94,11 @@ func (service *UserService) Register() *serializer.Response {
 		}
 	}
 	//创建用户
-	user.UserName = service.RegisterForm.UserName
-	user.NickName = service.RegisterForm.NickName
-	user.Avatar = service.RegisterForm.Avatar
-	user.Email = service.RegisterForm.Email
-	if err := model.DB.Create(&user).Error; err != nil {
+	userModel.UserName = service.RegisterForm.UserName
+	userModel.NickName = service.RegisterForm.NickName
+	userModel.Avatar = service.RegisterForm.Avatar
+	userModel.Email = service.RegisterForm.Email
+	if err := model.DB.Create(&userModel).Error; err != nil {
 		logger.Logger.Info(err)
 		code = e.ErrorDatabase
 		return &serializer.Response{

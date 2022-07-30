@@ -1,16 +1,33 @@
 package serializer
 
-import "time"
+import (
+	"time"
+)
 
 type BlogVO struct {
-	Id           uint      `json:"id" form:"id"`
-	CreatedAt    time.Time `json:"createdAt" from:"createdAt"`
-	Description  string    `json:"description" from:"description"`
-	FirstPicture string    `json:"firstPicture" from:"firstPicture"`
-	Flag         string    `json:"flag" from:"flag"`
-	Title        string    `json:"title" from:"title"`
-	TypeId       int       `json:"typeId" from:"typeId"`
-	TypeName     string    `json:"typeName" from:"typeName"`
-	Stars        int       `json:"stars" from:"stars"`
-	Content      string    `json:"content" from:"content"`
+	Id           uint      `json:"id"`
+	CreatedAt    time.Time `json:"createdAt"`
+	Description  string    `json:"description"`
+	FirstPicture string    `json:"firstPicture"`
+	Flag         string    `json:"flag"`
+	Title        string    `json:"title"`
+	TypeId       int       `json:"typeId"`
+	TypeName     string    `json:"typeName"`
+	Stars        int       `json:"stars"`
+	Content      string    `json:"content"`
+}
+
+type BlogVOWithTag struct {
+	BlogVO
+	TagIds   []uint   `json:"tagIds"`
+	TagNames []string `json:"tagNames"`
+}
+
+// BuildBlogVOWithTag 序列化带有tag的blog信息
+func BuildBlogVOWithTag(blogVO BlogVO, tagIds []uint, tagNames []string) BlogVOWithTag {
+	return BlogVOWithTag{
+		BlogVO: blogVO,
+		TagIds: tagIds,
+		TagNames: tagNames,
+	}
 }

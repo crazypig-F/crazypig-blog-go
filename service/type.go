@@ -56,7 +56,6 @@ func (service *TypeService) Create() *serializer.Response {
 	// 创建新的分类
 	typeModel.Name = service.TypeForm.Name
 	typeModel.PicUrl = service.TypeForm.PicUrl
-
 	if err := model.DB.Create(&typeModel).Error; err != nil {
 		logger.Logger.Info(err)
 		code = e.ErrorDatabase

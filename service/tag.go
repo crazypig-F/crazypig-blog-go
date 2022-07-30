@@ -15,6 +15,7 @@ type TagService struct {
 	TagForm TagForm
 }
 
+// List 返回所有标签信息
 func (service *TagService) List() *serializer.Response {
 	var tags []model.Tag
 	code := e.SUCCESS
@@ -33,11 +34,12 @@ func (service *TagService) List() *serializer.Response {
 	}
 	return &serializer.Response{
 		Status: code,
-		Data: tagVOs,
-		Msg: e.GetMsg(code),
+		Data:   tagVOs,
+		Msg:    e.GetMsg(code),
 	}
 }
 
+// Create 创建一个标签
 func (service *TagService) Create() *serializer.Response {
 	var tagModel model.Tag
 	code := e.SUCCESS
